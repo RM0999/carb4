@@ -12,10 +12,10 @@ api_keys = ["api_keys"]
 coinspot_api_key = "ac9f9169da95fb52f778aecd040b9cab"
 
 # Kraken
-kraken_api_key = laR7EcA3DPfhrN/j7RtMRRv3927UYzJgI1SjFJFdV0IteYwuQ4+xgtwL
+kraken_api_key = "laR7EcA3DPfhrN/j7RtMRRv3927UYzJgI1SjFJFdV0IteYwuQ4+xgtwL"
 
 # Crypto.com
-crypto_api_key = G2qNBm4uS1kijjddg8LDTy
+crypto_api_key = "G2qNBm4uS1kijjddg8LDTy"
 
 # Constants
 USD_TO_AUD = 1.52
