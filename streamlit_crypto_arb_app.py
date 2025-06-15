@@ -4,7 +4,7 @@ import requests
 from datetime import datetime
 
 # ----🔐 API Keys Section (configure via secrets.toml) ----
-api_keys = st.secrets["api_keys"]
+api_keys = st.secrets
 
 # ---- 💱 Live USD to AUD conversion rate (static fallback) ----
 USD_TO_AUD = 1.52
