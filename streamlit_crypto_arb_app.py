@@ -4,7 +4,25 @@ import requests
 from datetime import datetime
 
 # ----🔐 API Keys Section (configure via secrets.toml) ----
-api_keys = st.secrets["api_keys"]
+api_keys = ["api_keys"]
+
+[api_keys]
+
+# Coinbase
+coinbase_api_key = "organizations/2300e19b-1d24-40f0-b958-3df12e1308aa/apiKeys/ffdff2db-2b8c-41c3-84f8-82e4f0a123f4"
+
+# CoinSpot
+coinspot_api_key = "ac9f9169da95fb52f778aecd040b9cab"
+
+# Crypto.com
+crypto_api_key = "G2qNBm4uS1kijjddg8LDTy"
+
+# Independent Reserve
+independent_reserve_key = "baa135bf-0ecf-4d5c-9893-6434c3afc72c
+"
+
+# Kraken 
+kraken_api_key = " laR7EcA3DPfhrN/j7RtMRRv3927UYzJgI1SjFJFdV0IteYwuQ4+xgtwL"
 
 # ---- 💱 Live USD to AUD conversion rate (static fallback) ----
 USD_TO_AUD = 1.52
