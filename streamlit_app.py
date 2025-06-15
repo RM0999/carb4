@@ -25,7 +25,7 @@ with st.sidebar:
 # Simulated fetch functions for example (replace with real authenticated API fetches)
 def fetch_kraken():
     try:
-        r = requests.get("https://api.kraken.com/0/public/Ticker?pair=XBTUSD").json()
+        r = requests.get("laR7EcA3DPfhrN/j7RtMRRv3927UYzJgI1SjFJFdV0IteYwuQ4+xgtwL").json()
         data = r["result"]["XXBTZUSD"]
         ask = float(data["a"][0]) * USD_TO_AUD
         bid = float(data["b"][0]) * USD_TO_AUD
