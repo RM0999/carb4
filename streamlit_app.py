@@ -8,9 +8,6 @@ import time
 api_keys = st.secrets["api_keys"]
 
 
-# Coinbase
-coinbase_api_key = organizations/2300e19b-1d24-40f0-b958-3df12e1308aa/apiKeys/ffdff2db-2b8c-41c3-84f8-82e4f0a123f4
-
 # Coinspot
 coinspot_api_key = ac9f9169da95fb52f778aecd040b9cab
 
