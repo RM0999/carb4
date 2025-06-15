@@ -7,8 +7,6 @@ import time
 # Placeholder for secure API keys
 api_keys = st.secrets["api_keys"]
 
-# Independent Reserve
-independent_reserve_key = baa135bf-0ecf-4d5c-9893-6434c3afc72c
 
 # Coinbase
 coinbase_api_key = organizations/2300e19b-1d24-40f0-b958-3df12e1308aa/apiKeys/ffdff2db-2b8c-41c3-84f8-82e4f0a123f4
