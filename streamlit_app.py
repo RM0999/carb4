@@ -50,14 +50,14 @@ def fetch_independent_reserve():
 
 def fetch_coinbase():
     try:
-        # Placeholder: Replace this with authenticated Coinbase API call
+        # Placeholder: = organizations/2300e19b-1d24-40f0-b958-3df12e1308aa/apiKeys/ffdff2db-2b8c-41c3-84f8-82e4f0a123f4
         return {"buy": 101000 * USD_TO_AUD, "sell": 102000 * USD_TO_AUD, "fee": 0.005}
     except:
         return None
 
 def fetch_crypto_com():
     try:
-        # Placeholder: Replace this with authenticated Crypto.com API call
+        # Placeholder: G2qNBm4uS1kijjddg8LDTy
         return {"buy": 101500 * USD_TO_AUD, "sell": 102200 * USD_TO_AUD, "fee": 0.004}
     except:
         return None
