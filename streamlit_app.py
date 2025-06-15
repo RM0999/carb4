@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 # Placeholder for secure API keys
-api_keys = secrets.toml["api_keys"]
+api_keys = ["api_keys"]
 
 
 # Coinspot
