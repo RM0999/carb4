@@ -7,26 +7,20 @@ import time
 # Placeholder for secure API keys
 api_keys = st.secrets["api_keys"]
 
-
 # Independent Reserve
 independent_reserve_key = baa135bf-0ecf-4d5c-9893-6434c3afc72c
-independent_reserve_secret = a08527c204ba4c4088d779c6b0fa9870
 
 # Coinbase
 coinbase_api_key = organizations/2300e19b-1d24-40f0-b958-3df12e1308aa/apiKeys/ffdff2db-2b8c-41c3-84f8-82e4f0a123f4
-coinbase_api_secret = -----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIPHriqrHEquCF4xAj/lYl+8f1LXZt/nDGIw0dBIpUlzpoAoGCCqGSM49\nAwEHoUQDQgAEJEvVR+wCnDf0fC6JdZiPAzjUnEyOmE7dyN3FXJU6w1t3cbuUR6Ls\n1zIsHCMgKl9DOY4d5RgSWpIko3eOaqdtUA==\n-----END EC PRIVATE KEY-----\n
 
-# CoinSpot
+# Coinspot
 coinspot_api_key = ac9f9169da95fb52f778aecd040b9cab
-coinspot_api_secret = ac9f9169da95fb52f778aecd040b9cab
 
 # Kraken
 kraken_api_key = laR7EcA3DPfhrN/j7RtMRRv3927UYzJgI1SjFJFdV0IteYwuQ4+xgtwL
-kraken_api_secret = bwMZ23eZ5NAcKuchd9vgKkVVxhuNwVToa3OVU2IE5EBt0LJdiOBgm3jOA336OEZdWNfUcoHplFcDwBufDLDOeg==
 
 # Crypto.com
 crypto_api_key = G2qNBm4uS1kijjddg8LDTy
-crypto_api_secret = cxakp_sQbMJt7i3xMELTgGEJN4Ak
 
 # Constants
 USD_TO_AUD = 1.52
