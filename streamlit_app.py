@@ -1,106 +1,68 @@
 
 import streamlit as st
 import requests
-import hmac
-import hashlib
-import time
-import base64
-import json
 from datetime import datetime
+import time
 
-# --- Constants ---
-USD_TO_AUD = 1.52  # Placeholder; ideally replaced with live FX data
-HEADERS = {"Content-Type": "application/json"}
+# Placeholder for secure API keys
+api_keys = st.secrets["api_keys"]
 
-# --- Streamlit Config ---
-st.set_page_config(page_title="Secure Arbitrage Scanner", layout="wide")
-st.markdown("<h1 style='text-align: center;'>🔒 Secure Crypto Arbitrage Scanner</h1>", unsafe_allow_html=True)
+# Constants
+USD_TO_AUD = 1.52
 
-# --- Sidebar ---
+# Configure Streamlit
+st.set_page_config(page_title="Secure Crypto Arbitrage Scanner", layout="wide")
+st.markdown("<h1 style='text-align: center;'>🔐 Secure Crypto Arbitrage Scanner</h1>", unsafe_allow_html=True)
+
+# Sidebar inputs
 with st.sidebar:
-    st.title("⚙️ Settings")
-    coin = st.selectbox("Select Coin", ["BTC", "ETH", "LTC", "XRP", "ADA", "DOGE", "SHIB", "MATIC"])
-    min_profit = st.slider("Minimum Net Profit (%)", 0.1, 5.0, 1.0)
-    investment = st.number_input("Investment (AUD)", min_value=10, value=1000)
-    exchanges = st.multiselect("Exchanges", [
-        "Binance", "Kraken", "CoinSpot", "IndependentReserve", "Coinbase", "Crypto.com"
-    ], default=["Binbase", "CoinSpot", "Kraken"])
+    st.title("Settings")
+    coin = st.selectbox("Select Coin", ["BTC", "ETH", "LTC", "XRP", "ADA"])
+    min_profit = st.slider("Minimum Profit (%)", 0.1, 10.0, 1.0)
+    investment = st.number_input("Investment (AUD)", min_value=100, value=1000)
+    refresh_interval = st.slider("Refresh every (seconds)", 5, 60, 10)
 
-# --- Helper Functions ---
-def timestamp():
-    return str(int(time.time() * 1000))
-
-def fetch_coinspot():
+# Simulated fetch functions for example (replace with real authenticated API fetches)
+def fetch_kraken():
     try:
-        key = st.secrets["coinspot_api_key"]
-        secret = st.secrets["coinspot_secret_key"]
-        req = {"nonce": timestamp()}
-        msg = json.dumps(req).encode()
-        sig = hmac.new(secret.encode(), msg, hashlib.sha512).hexdigest()
-        headers = {"Content-type": "application/json", "key": key, "sign": sig}
-        r = requests.post("https://www.coinspot.com.au/api/quotes", headers=headers, data=msg).json()
-        ask = float(r[coin.lower()]["buy"])
-        bid = float(r[coin.lower()]["sell"])
-        return {"buy": ask, "sell": bid, "fee": 0.01}
+        r = requests.get("https://api.kraken.com/0/public/Ticker?pair=XBTUSD").json()
+        data = r["result"]["XXBTZUSD"]
+        ask = float(data["a"][0]) * USD_TO_AUD
+        bid = float(data["b"][0]) * USD_TO_AUD
+        return {"buy": ask, "sell": bid, "fee": 0.0026}
     except:
         return None
 
-def fetch_kraken():
+def fetch_coinspot():
     try:
-        pair_map = {"BTC": "XBT", "ETH": "ETH", "LTC": "LTC", "XRP": "XRP", "ADA": "ADA", "DOGE": "DOGE", "SHIB": "SHIB", "MATIC": "MATIC"}
-        pair = f"{pair_map[coin]}USD"
-        r = requests.get(f"https://api.kraken.com/0/public/Ticker?pair={pair}").json()
-        kr_pair = list(r["result"].keys())[0]
-        data = r["result"][kr_pair]
-        return {
-            "buy": float(data["a"][0]) * USD_TO_AUD,
-            "sell": float(data["b"][0]) * USD_TO_AUD,
-            "fee": 0.0026
-        }
+        r = requests.get("https://www.coinspot.com.au/pubapi/v2/latest").json()
+        prices = r["prices"]["BTC"]
+        return {"buy": float(prices["ask"]), "sell": float(prices["bid"]), "fee": 0.01}
     except:
         return None
 
 def fetch_independent_reserve():
     try:
-        r = requests.get(f"https://api.independentreserve.com/Public/GetMarketSummary?primaryCurrencyCode={coin}&secondaryCurrencyCode=AUD").json()
-        return {
-            "buy": float(r["CurrentLowestOfferPrice"]),
-            "sell": float(r["CurrentHighestBidPrice"]),
-            "fee": 0.005
-        }
+        r = requests.get("https://api.independentreserve.com/Public/GetMarketSummary?primaryCurrencyCode=Xbt&secondaryCurrencyCode=Aud").json()
+        return {"buy": float(r["CurrentLowestOfferPrice"]), "sell": float(r["CurrentHighestBidPrice"]), "fee": 0.005}
     except:
         return None
 
 def fetch_coinbase():
     try:
-        r = requests.get(f"https://api.coinbase.com/v2/prices/{coin}-USD/spot").json()
-        price = float(r["data"]["amount"]) * USD_TO_AUD
-        return {"buy": price * 1.002, "sell": price * 0.998, "fee": 0.005}
+        # Placeholder: Replace this with authenticated Coinbase API call
+        return {"buy": 101000 * USD_TO_AUD, "sell": 102000 * USD_TO_AUD, "fee": 0.005}
     except:
         return None
 
 def fetch_crypto_com():
     try:
-        r = requests.get(f"https://api.crypto.com/v2/public/get-ticker?instrument_name={coin}_USDT").json()
-        data = r["result"]["data"]
-        return {"buy": float(data["a"]) * USD_TO_AUD, "sell": float(data["b"]) * USD_TO_AUD, "fee": 0.001}
+        # Placeholder: Replace this with authenticated Crypto.com API call
+        return {"buy": 101500 * USD_TO_AUD, "sell": 102200 * USD_TO_AUD, "fee": 0.004}
     except:
         return None
 
-def fetch_binance():
-    try:
-        r = requests.get(f"https://api.binance.com/api/v3/ticker/bookTicker?symbol={coin}USDT").json()
-        return {
-            "buy": float(r["askPrice"]) * USD_TO_AUD,
-            "sell": float(r["bidPrice"]) * USD_TO_AUD,
-            "fee": 0.001
-        }
-    except:
-        return None
-
-# --- API Mapping ---
 fetchers = {
-    "Binance": fetch_binance,
     "Kraken": fetch_kraken,
     "CoinSpot": fetch_coinspot,
     "IndependentReserve": fetch_independent_reserve,
@@ -108,29 +70,30 @@ fetchers = {
     "Crypto.com": fetch_crypto_com
 }
 
-# --- Live Scan ---
-data = {ex: fetchers[ex]() for ex in exchanges if fetchers[ex]() is not None}
-valid = {ex: v for ex, v in data.items() if v}
+# Run scanning logic
+data = {ex: fetchers[ex]() for ex in fetchers if fetchers[ex]() is not None}
+if data:
+    best_buy = min(data.items(), key=lambda x: x[1]['buy'])
+    best_sell = max(data.items(), key=lambda x: x[1]['sell'])
 
-if valid:
-    best_buy = min(valid.items(), key=lambda x: x[1]["buy"])
-    best_sell = max(valid.items(), key=lambda x: x[1]["sell"])
     spread = best_sell[1]["sell"] - best_buy[1]["buy"]
-
+    gross_profit_pct = (spread / best_buy[1]["buy"]) * 100
     buy_fee = best_buy[1]["buy"] * best_buy[1]["fee"]
     sell_fee = best_sell[1]["sell"] * best_sell[1]["fee"]
-    net_profit = spread - buy_fee - sell_fee
-    profit_pct = round((net_profit / best_buy[1]["buy"]) * 100, 2)
-    profit_aud = round((net_profit / best_buy[1]["buy"]) * investment, 2)
+    total_fee = buy_fee + sell_fee
+    net_profit_pct = ((spread - total_fee) / best_buy[1]["buy"]) * 100
+    profit_aud = investment * (net_profit_pct / 100)
 
-    if profit_pct >= min_profit:
-        st.success(f"🟢 Arbitrage Opportunity Found at {datetime.now().strftime('%H:%M:%S')}")
-        st.write(f"🛒 Buy from: **{best_buy[0]}** at **AUD ${best_buy[1]['buy']:.2f}**")
-        st.write(f"💰 Sell on: **{best_sell[0]}** at **AUD ${best_sell[1]['sell']:.2f}**")
-        st.write(f"🔄 Spread: **AUD ${spread:.2f}**")
-        st.write(f"💸 Net Profit: **{profit_pct}%** | **AUD ${profit_aud}**")
-        st.caption(f"Fees: Buy Fee = AUD ${buy_fee:.2f}, Sell Fee = AUD ${sell_fee:.2f}")
+    timestamp = datetime.now().strftime("%H:%M:%S")
+
+    if net_profit_pct >= min_profit:
+        st.success(f"🚀 Arbitrage Opportunity Found at {timestamp}")
+        st.write(f"🛒 Buy from: {best_buy[0]} at AUD ${best_buy[1]['buy']:.2f}")
+        st.write(f"💰 Sell on: {best_sell[0]} at AUD ${best_sell[1]['sell']:.2f}")
+        st.write(f"🔄 Spread: AUD ${spread:.2f} ({gross_profit_pct:.2f}%)")
+        st.write(f"💸 Fees: Buy Fee = AUD ${buy_fee:.2f}, Sell Fee = AUD ${sell_fee:.2f}")
+        st.write(f"📈 Net Profit: {net_profit_pct:.2f}% | AUD ${profit_aud:.2f}")
     else:
-        st.warning("No profitable arbitrage opportunity found above your threshold.")
+        st.warning(f"No profitable arbitrage opportunity above your threshold.")
 else:
-    st.error("⚠️ Could not retrieve valid data from any selected exchange.")
+    st.error("⚠️ Failed to retrieve valid price data.")
