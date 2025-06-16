@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 
 # --- Constants ---
-USD_TO_AUD = 1.52  # Static FX for simplicity
+USD_TO_AUD = 1.54  # Static FX for simplicity
 
 COINS = {
     "BTC": {"symbol": "BTC"},
