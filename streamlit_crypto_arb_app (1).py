@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 # --- Constants ---
-USD_TO_AUD = 1.53
+USD_TO_AUD = 1.52
 COINS = ["BTC", "ETH", "LTC", "XRP", "ADA", "DOGE", "SHIB", "MATIC"]
 
 # --- Streamlit Config ---
