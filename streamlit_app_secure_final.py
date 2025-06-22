@@ -102,24 +102,31 @@ def fetch_coinbase(coin: str):
 # ---------- Independent Reserve (private market summary) ----------
 def fetch_independent_reserve(coin: str):
     try:
-        path   = "/Private/GetMarketSummary"
-        nonce  = str(int(time.time()*1000))
-        qs     = f"primaryCurrencyCode={coin}&secondaryCurrencyCode=AUD"
+        path = "/Private/GetMarketSummary"
+        nonce = str(int(time.time() * 1000))
+        qs = f"primaryCurrencyCode={coin}&secondaryCurrencyCode=AUD"
         sigmsg = path + nonce + qs
-        sig    = hmac.new(api["independent_reserve_secret"].encode(),
-                          sigmsg.encode(), hashlib.sha256).hexdigest()
-        hdrs   = {"api-key": api["independent_reserve_key"],
-                  "timestamp": nonce,
-                  "signature": sig}
-        url    = "https://api.independentreserve.com"+path+"?"+qs
-        r = requests.get(url, headers=hdrs, timeout=7)
-data = json.loads(r.content.decode("utf-8-sig"))
-        ask = float(r["CurrentLowestOfferPrice"])
-        bid = float(r["CurrentHighestBidPrice"])
+        sig = hmac.new(api["independent_reserve_secret"].encode(),
+                       sigmsg.encode(), hashlib.sha256).hexdigest()
+        headers = {
+            "api-key": api["independent_reserve_key"],
+            "timestamp": nonce,
+            "signature": sig
+        }
+        url = "https://api.independentreserve.com" + path + "?" + qs
+        r = requests.get(url, headers=headers, timeout=7)
+        
+        # Fix for BOM encoding issue
+        data = json.loads(r.content.decode("utf-8-sig"))
+        
+        ask = float(data["CurrentLowestOfferPrice"])
+        bid = float(data["CurrentHighestBidPrice"])
         return {"buy": ask, "sell": bid, "fee": 0.005}
+    
     except Exception as e:
         st.error(f"IR error {e}")
         return None
+
 
 # ---------- Crypto.com (private market ticker) ----------
 def fetch_crypto(coin: str):
