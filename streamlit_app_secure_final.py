@@ -9,6 +9,8 @@ from fetch_all_exchanges_private import (
     fetch_crypto as fetch_crypto_com
 )
 import requests
+import urllib.parse
+
 
 # Live FX rate
 def get_fx_rate():
