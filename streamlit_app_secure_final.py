@@ -144,11 +144,14 @@ def fetch_crypto(coin: str):
         st.error(f"Crypto.com error {e}")
         return None
 """
-
 # Save file
 path = "/mnt/data/fetch_all_exchanges_private.py"
 with open(path, "w") as f:
     f.write(file_content)
+
+path
+"""
+
 
 path
 
