@@ -112,7 +112,8 @@ def fetch_independent_reserve(coin: str):
                   "timestamp": nonce,
                   "signature": sig}
         url    = "https://api.independentreserve.com"+path+"?"+qs
-        r = requests.get(url, headers=hdrs, timeout=7).json()
+        r = requests.get(url, headers=hdrs, timeout=7)
+data = json.loads(r.content.decode("utf-8-sig"))
         ask = float(r["CurrentLowestOfferPrice"])
         bid = float(r["CurrentHighestBidPrice"])
         return {"buy": ask, "sell": bid, "fee": 0.005}
