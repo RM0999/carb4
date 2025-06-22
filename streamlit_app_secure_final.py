@@ -153,9 +153,6 @@ path
 """
 
 
-path
-
-
 
 USD_TO_AUD = get_fx_rate()
 
